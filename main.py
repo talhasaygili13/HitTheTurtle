@@ -3,7 +3,7 @@ import random
 import tkinter
 scr = turtle.Screen()
 scr.bgcolor("light gray")
-scr.title("Catch The Turtle Game")
+scr.title("Hit The Turtle Game")
 FONT = ('Haveltica', 15, 'bold')
 turtle_list = []
 score = 0
