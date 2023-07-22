@@ -98,7 +98,7 @@ def start_game_up():
     setup_turtles()
     hide_turtles()
     show_turtles_randomly()
-    countdown(5)
+    countdown(30)
     turtle.tracer(1)
 start_game_up()
 hide_turtles()
