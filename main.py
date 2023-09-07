@@ -13,11 +13,10 @@ play_again_btn = tkinter.Button(bg="dark gray")
 game_over = False
 
 def setup_score_turtle():
-
     score_turtle.hideturtle()
     score_turtle.penup()
     top_height = scr.window_height() / 2
-    y = top_height * 0.9
+    y = top_height * 0.8
     score_turtle.setpos(0, y)
     score_turtle.color("black")
     score_turtle.write(arg="Score: 0", move=False, align="center", font=FONT)
@@ -48,16 +47,20 @@ def play_again():
     score_turtle.clear()
     countdown_turtle.clear()
     start_game_up()
-    play_again_btn.pack_forget()
 
+def restart():
+    hide_turtles()
+    stop_game()
+    start_game_up()
 
 def show_turtles_randomly():
-    global game_over
-    global score
+    global game_over, score
     if not game_over:
         hide_turtles()
         random.choice(turtle_list).showturtle()
-        scr.ontimer(show_turtles_randomly, 500)
+        scr.ontimer(show_turtles_randomly, 300)
+        play_again_btn.config(text="Restart", height=5, width=15, command=restart)
+        play_again_btn.pack()
     else:
         hide_turtles()
         if game_over:
@@ -66,29 +69,30 @@ def show_turtles_randomly():
 
 def countdown(time):
     global game_over
-    countdown_turtle.hideturtle()
-    countdown_turtle.penup()
-    top_height = scr.window_height() / 2
-    y = top_height * 0.7
-    countdown_turtle.setposition(0, y)
-    countdown_turtle.clear()
-    if time > 0:
+    if not game_over:
+        countdown_turtle.hideturtle()
+        countdown_turtle.penup()
+        top_height = scr.window_height() / 2
+        y = top_height * 0.7
+        countdown_turtle.setposition(0, y)
         countdown_turtle.clear()
-        countdown_turtle.write(arg=f"Time Remaining: {time}", move=False, align="center", font=FONT)
-        scr.ontimer(lambda: countdown(time - 1), 1000)
-    else:
-        game_over = True
-        countdown_turtle.clear()
-        hide_turtles()
-        if score < 10:
+        if time > 0:
             countdown_turtle.clear()
-            countdown_turtle.write(arg=f"Game Over!!: {score}", move=False, align="center", font=FONT)
-        elif score >= 10 and score <= 20:
+            countdown_turtle.write(arg=f"Time Remaining: {time}", move=False, align="center", font=FONT)
+            scr.ontimer(lambda: countdown(time - 1), 1000)
+        else:
+            game_over = True
             countdown_turtle.clear()
-            countdown_turtle.write(arg=f"You can do better: {score}", move=False, align="center", font=FONT)
-        elif score > 20:
-            countdown_turtle.clear()
-            countdown_turtle.write(arg=f"Congratulations. You win: {score}", move=False, align="center", font=FONT)
+            hide_turtles()
+            if score < 10:
+                countdown_turtle.clear()
+                countdown_turtle.write(arg=f"Game Over!!: {score}", move=False, align="center", font=FONT)
+            elif score >= 10 and score <= 20:
+                countdown_turtle.clear()
+                countdown_turtle.write(arg=f"You can do better: {score}", move=False, align="center", font=FONT)
+            elif score > 20:
+                countdown_turtle.clear()
+                countdown_turtle.write(arg=f"Congratulations. You win: {score}", move=False, align="center", font=FONT)
 def hide_turtles():
     for t in turtle_list:
         t.hideturtle()
@@ -102,5 +106,18 @@ def start_game_up():
     turtle.tracer(1)
 start_game_up()
 hide_turtles()
+
+
+def stop_game():
+    global game_over, score
+    turtle.tracer(0)
+    hide_turtles()
+    score = 0
+    score_turtle.clear()
+    countdown_turtle.clear()
+    game_over = True
+    turtle.tracer(1)
+
+
 
 turtle.mainloop()
